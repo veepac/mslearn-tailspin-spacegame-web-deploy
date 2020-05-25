@@ -94,20 +94,20 @@ stages:
               artifactName: dropDacpac
             condition: succeededOrFailed()
 
-    - stage: DBAVerificationScript
-      displayName: "Script database schema changes"
-      dependsOn: Build
-      jobs:
-      - deployment: DBAVerificationScript
-        pool:
-          vmImage: "windows-2019"
-        variables:
+      - stage: DBAVerificationScript
+        displayName: "Script database schema changes"
+        dependsOn: Build
+        jobs:
+        - deployment: DBAVerificationScript
+          pool:
+            vmImage: "windows-2019"
+          variables:
           - group: "Release"
-        environment: "dbaverificationscript"
-        strategy:
-          runOnce:
-            deploy:
-              steps:
+          environment: "dbaverificationscript"
+          strategy:
+            runOnce:
+              deploy:
+                steps:
                 - download: current
                   artifact: dropDacpac
                   patterns: "**/*"
