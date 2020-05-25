@@ -94,20 +94,20 @@ stages:
               artifactName: dropDacpac
             condition: succeededOrFailed()
 
-      - stage: DBAVerificationScript
-        displayName: "Script database schema changes"
-        dependsOn: Build
-        jobs:
-        - deployment: DBAVerificationScript
-          pool:
-            vmImage: "windows-2019"
-          variables:
+  - stage: DBAVerificationScript
+    displayName: "Script database schema changes"
+    dependsOn: Build
+    jobs:
+      - deployment: DBAVerificationScript
+        pool:
+          vmImage: "windows-2019"
+        variables:
           - group: "Release"
-          environment: "dbaverificationscript"
-          strategy:
-            runOnce:
-              deploy:
-                steps:
+        environment: "dbaverificationscript"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
                 - download: current
                   artifact: dropDacpac
                   patterns: "**/*"
@@ -132,10 +132,10 @@ stages:
                       Write-Host "Auto Generated SQL Update Script:"
                       Get-Content d:\a\1\s\GeneratedOutputFiles\$(databasename)_Script.sql | foreach {Write-Output $_}
 
-    - stage: DBAVerificationApply
-      displayName: "Apply database schema changes"
-      dependsOn: DBAVerificationScript
-      jobs:
+  - stage: DBAVerificationApply
+    displayName: "Apply database schema changes"
+    dependsOn: DBAVerificationScript
+    jobs:
       - deployment: DBAVerificationApply
         pool:
           vmImage: "windows-2019"
